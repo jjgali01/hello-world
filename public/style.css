@@ -1,0 +1,588 @@
+/* ===================== RESET & BASE ===================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --sky: #0a0a1a;
+  --ground: #1a120a;
+  --grass: #1a3a1a;
+  --stone-light: #b0a898;
+  --stone-mid: #8a8078;
+  --stone-dark: #5a5450;
+  --stone-shadow: #3a3430;
+  --text-light: #e8e0d0;
+  --text-dim: #a09888;
+  --accent: #c8b89a;
+  --flower-pink: #ff9ec8;
+  --flower-yellow: #ffe87a;
+  --pixel: 4px;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Press Start 2P', monospace;
+  background: var(--sky);
+  color: var(--text-light);
+  overflow-x: hidden;
+}
+
+/* ===================== SKY ===================== */
+#sky {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(to bottom, #050510 0%, #0d0d2a 50%, #1a1a0a 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.moon {
+  position: absolute;
+  top: 6%;
+  right: 12%;
+  width: 64px;
+  height: 64px;
+  background: #fdf8e8;
+  box-shadow:
+    0 0 0 4px #fdf8e8,
+    0 0 0 8px #f5e8b040,
+    0 0 40px 20px #f5e8b020;
+  image-rendering: pixelated;
+  /* Pixel moon cutout */
+  clip-path: polygon(
+    0 25%, 25% 0, 75% 0, 100% 25%,
+    100% 75%, 75% 100%, 25% 100%, 0 75%
+  );
+}
+
+/* ===================== STARS ===================== */
+#stars {
+  position: absolute;
+  inset: 0;
+}
+
+.star {
+  position: absolute;
+  background: #fff;
+  animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.4); }
+}
+
+/* ===================== HEADER ===================== */
+header {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 32px 16px 16px;
+}
+
+.title {
+  font-size: clamp(14px, 3vw, 22px);
+  color: var(--accent);
+  text-shadow:
+    4px 4px 0 #000,
+    -2px -2px 0 #000;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.subtitle {
+  font-size: 8px;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+  letter-spacing: 1px;
+}
+
+/* ===================== PIXEL BUTTONS ===================== */
+.pixel-btn {
+  display: inline-block;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #000;
+  background: var(--accent);
+  border: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  text-decoration: none;
+  image-rendering: pixelated;
+  /* Pixel art shadow effect */
+  box-shadow:
+    4px 0 0 #000,
+    0 4px 0 #000,
+    4px 4px 0 #000,
+    -2px -2px 0 rgba(255,255,255,0.3) inset;
+  transition: transform 0.05s, box-shadow 0.05s;
+  line-height: 1.6;
+}
+
+.pixel-btn:hover {
+  background: #ddd0b8;
+  box-shadow:
+    4px 0 0 #000,
+    0 4px 0 #000,
+    4px 4px 0 #000,
+    -2px -2px 0 rgba(255,255,255,0.5) inset;
+}
+
+.pixel-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    2px 0 0 #000,
+    0 2px 0 #000,
+    2px 2px 0 #000;
+}
+
+.pixel-btn.small { font-size: 7px; padding: 8px 12px; }
+
+.flower-btn {
+  background: #d0608a;
+  color: #fff;
+  font-size: 8px;
+  margin-top: 16px;
+}
+.flower-btn:hover { background: #e070a0; }
+
+/* ===================== GRAVEYARD ===================== */
+#graveyard {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 20px;
+}
+
+#ground {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20vh;
+  background: repeating-linear-gradient(
+    to right,
+    #1a3a1a 0px,
+    #1a3a1a 4px,
+    #122a12 4px,
+    #122a12 8px
+  );
+  z-index: 4;
+  border-top: 4px solid #0e200e;
+}
+
+#memorials-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ===================== GRAVESTONES ===================== */
+.gravestone-wrap {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transform: translateX(-50%);
+  transition: filter 0.1s;
+  z-index: 6;
+}
+
+.gravestone-wrap:hover .gravestone {
+  filter: brightness(1.3);
+}
+
+.gravestone-wrap:hover .grave-shadow {
+  opacity: 0.5;
+}
+
+.gravestone {
+  position: relative;
+  width: 80px;
+  min-height: 100px;
+  background: var(--stone-mid);
+  /* Pixel art gravestone shape via clip-path */
+  clip-path: polygon(
+    10% 100%, 10% 20%, 20% 0%, 80% 0%, 90% 20%, 90% 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 8px 8px;
+  gap: 4px;
+  box-shadow:
+    -4px 0 0 var(--stone-shadow),
+    0 4px 0 var(--stone-shadow),
+    4px 0 0 var(--stone-light),
+    0 -4px 0 var(--stone-light);
+  image-rendering: pixelated;
+}
+
+.gravestone.large {
+  width: 110px;
+  min-height: 140px;
+  padding-top: 24px;
+}
+
+.gravestone.small {
+  width: 60px;
+  min-height: 80px;
+  padding-top: 12px;
+}
+
+.grave-rip {
+  font-size: 5px;
+  color: var(--stone-shadow);
+  letter-spacing: 1px;
+  text-align: center;
+  z-index: 1;
+}
+
+.grave-epitaph {
+  font-size: 5px;
+  color: var(--stone-dark);
+  text-align: center;
+  line-height: 1.8;
+  word-break: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  z-index: 1;
+}
+
+.grave-img {
+  width: 48px;
+  height: 36px;
+  object-fit: cover;
+  image-rendering: pixelated;
+  filter: grayscale(0.6) sepia(0.3);
+  border: 2px solid var(--stone-shadow);
+  z-index: 1;
+}
+
+.gravestone.large .grave-img {
+  width: 72px;
+  height: 52px;
+}
+
+.gravestone.small .grave-img {
+  width: 36px;
+  height: 28px;
+}
+
+.grave-shadow {
+  width: 90%;
+  height: 8px;
+  background: rgba(0,0,0,0.4);
+  border-radius: 50%;
+  margin-top: -2px;
+  filter: blur(3px);
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.grave-flowers {
+  font-size: 11px;
+  margin-top: 2px;
+  min-height: 14px;
+  letter-spacing: -2px;
+}
+
+/* ===================== MODAL ===================== */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+#modal-overlay.hidden { display: none; }
+
+#modal {
+  background: #1a1810;
+  border: 4px solid var(--stone-mid);
+  box-shadow:
+    8px 0 0 #000,
+    0 8px 0 #000,
+    8px 8px 0 #000;
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+#modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+#modal-content h2 {
+  font-size: 10px;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+
+#modal-content p {
+  font-size: 8px;
+  color: var(--text-light);
+  line-height: 2;
+  margin-bottom: 12px;
+}
+
+#modal-content img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: grayscale(0.4) sepia(0.2);
+  border: 4px solid var(--stone-dark);
+  margin: 12px 0;
+}
+
+#flower-count {
+  font-size: 8px;
+  color: var(--flower-pink);
+  margin-top: 8px;
+  min-height: 20px;
+}
+
+/* ===================== FLOWER ANIMATION ===================== */
+#flower-animation {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 200;
+  overflow: hidden;
+}
+
+.falling-flower {
+  position: absolute;
+  font-size: 20px;
+  animation: fall 2s ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ===================== EMPTY STATE ===================== */
+#empty-state {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: var(--text-dim);
+  z-index: 7;
+}
+
+#empty-state p {
+  font-size: 8px;
+  line-height: 2.5;
+  margin-bottom: 20px;
+}
+
+/* ===================== SUBMIT PAGE ===================== */
+#submit-page {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 40px 16px 80px;
+}
+
+#submit-box {
+  background: rgba(10, 8, 5, 0.92);
+  border: 4px solid var(--stone-mid);
+  box-shadow:
+    8px 0 0 #000,
+    0 8px 0 #000,
+    8px 8px 0 #000;
+  padding: 32px 28px;
+  max-width: 540px;
+  width: 100%;
+}
+
+.back-btn { margin-bottom: 24px; display: inline-block; }
+
+.form-title {
+  font-size: 12px;
+  color: var(--accent);
+  text-shadow: 3px 3px 0 #000;
+  margin-bottom: 12px;
+}
+
+.form-subtitle {
+  font-size: 7px;
+  color: var(--text-dim);
+  line-height: 2.2;
+  margin-bottom: 28px;
+  font-family: 'Press Start 2P', monospace;
+}
+
+.field {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+label {
+  display: block;
+  font-size: 7px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+textarea {
+  width: 100%;
+  background: #0d0b08;
+  border: 4px solid var(--stone-dark);
+  color: var(--text-light);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.8;
+  outline: none;
+  box-shadow: inset 2px 2px 0 #000;
+}
+
+textarea:focus {
+  border-color: var(--stone-mid);
+}
+
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 6px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* Image upload area */
+#image-drop-area {
+  border: 4px dashed var(--stone-dark);
+  background: #0d0b08;
+  padding: 24px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+#image-drop-area:hover,
+#image-drop-area.dragover {
+  border-color: var(--stone-mid);
+}
+
+#image-drop-area input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+#drop-hint {
+  font-size: 8px;
+  color: var(--text-dim);
+  line-height: 2.5;
+  pointer-events: none;
+}
+
+#drop-hint span { font-size: 7px; }
+#drop-hint small { font-size: 6px; }
+
+#image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: grayscale(0.3) sepia(0.2);
+  border: 4px solid var(--stone-dark);
+}
+
+.hidden { display: none !important; }
+
+.submit-btn {
+  width: 100%;
+  font-size: 11px;
+  padding: 16px;
+  background: #4a2828;
+  color: var(--accent);
+  margin-top: 8px;
+}
+
+.submit-btn:hover { background: #5a3030; }
+.submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow:
+    4px 0 0 #000,
+    0 4px 0 #000,
+    4px 4px 0 #000;
+}
+
+/* Success */
+#success-msg {
+  text-align: center;
+  padding-top: 12px;
+}
+
+.gravestone-preview-wrap {
+  display: inline-block;
+  background: var(--stone-mid);
+  clip-path: polygon(10% 100%, 10% 20%, 20% 0%, 80% 0%, 90% 20%, 90% 100%);
+  padding: 28px 20px 20px;
+  margin: 20px auto;
+  min-width: 120px;
+}
+
+.rip-text {
+  font-size: 8px;
+  color: var(--stone-shadow);
+  margin-bottom: 8px;
+}
+
+#success-epitaph {
+  font-size: 6px;
+  color: var(--stone-dark);
+  line-height: 1.8;
+  word-break: break-word;
+}
+
+.success-note {
+  font-size: 7px;
+  color: var(--text-dim);
+  line-height: 2;
+  margin: 16px 0 20px;
+}
+
+/* ===================== SCROLLBAR ===================== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: var(--stone-dark); }
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width: 480px) {
+  .gravestone { width: 60px; min-height: 80px; }
+  .gravestone.large { width: 80px; min-height: 110px; }
+  .grave-epitaph { font-size: 4px; }
+  .grave-img { width: 36px; height: 28px; }
+  .gravestone.large .grave-img { width: 52px; height: 40px; }
+}

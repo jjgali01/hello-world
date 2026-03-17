@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Mourning Grounds</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="sky">
+    <div class="moon"></div>
+    <div id="stars"></div>
+  </div>
+
+  <header>
+    <h1 class="title">THE MOURNING GROUNDS</h1>
+    <p class="subtitle">a place to grieve what is gone</p>
+    <a href="submit.html" class="pixel-btn">+ ADD A MEMORIAL</a>
+  </header>
+
+  <div id="graveyard">
+    <div id="ground"></div>
+    <div id="memorials-container"></div>
+  </div>
+
+  <!-- Gravestone modal -->
+  <div id="modal-overlay" class="hidden">
+    <div id="modal">
+      <button id="modal-close" class="pixel-btn small">✕ CLOSE</button>
+      <div id="modal-content"></div>
+      <button id="lay-flowers-btn" class="pixel-btn flower-btn">🌸 LAY FLOWERS</button>
+      <p id="flower-count"></p>
+    </div>
+  </div>
+
+  <div id="flower-animation"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
